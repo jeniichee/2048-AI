@@ -1,4 +1,4 @@
-from view import View
+# from view import View
 
 class solver2048():
     #tic tac toe representation: list of three tuples w 3 posns
@@ -13,8 +13,8 @@ class solver2048():
 
     # if win, utility = 1
     # if loss, utility = -1
-
-    def utility(state):
+    
+    def utility(self, state):
         answer = None
         # possible actions: up, down, left, right
         movepossible = False
@@ -301,3 +301,7 @@ class solver2048():
         #             if currentValue < minValue:
         #                 minValue = currentValue
         # return minValue
+
+if __name__ == "__main__":
+    game_solver = solver2048()
+    game_solver.play_game()
