@@ -1,5 +1,3 @@
-# from main import solver2048
-
 from matplotlib import pyplot as plt
 from matplotlib import colors
 
