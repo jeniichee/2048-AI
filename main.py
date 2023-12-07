@@ -1,3 +1,5 @@
+import unittest;
+
 class solver2048():
     #tic tac toe representation: list of three tuples w 3 posns
 
@@ -30,22 +32,25 @@ class solver2048():
         moveMade = False
         #action = up
         # for every possible index
+
+
         for index in range(0,4) :
         # this just pulls out a column
             column = []
             for row in range(0,4):
                 column.append(state[row][index])
-            #print('starting column')
-            #print(column)
+            print('starting column')
+            print(column)
 
             # moves everything up
             #this pulls out every tile in the column (index)
             for tile_index in range(0,4):
                 # the tile
                 tile = column[tile_index]
-        
+    
                 # tile is an actual number
-                if tile != 0 :
+                if not  column[tile_index] == 0 :
+  
                     # this pulls out all the tiles above the tile
                     # first entry of column = top tiles
                     for t in range (0,tile_index):
@@ -55,8 +60,8 @@ class solver2048():
                                 # CHANGE TO T + 1!!!!!
                             column[tile_index] = 0
                             moveMade = True
-                           # print('intermediate column')
-                          #  print(column)
+                            print('intermediate column')
+                            print(column)
                             break
 
             #this pulls out every tile in the column (index)
@@ -68,6 +73,7 @@ class solver2048():
                 if tile != 0 and tile == column[next_tile_index]:
                     # combines values
                     new_value = tile + column[next_tile_index]
+                    moveMade = True
                     # updates top tile to have new combined value
                     column[tile_index] = new_value
                     column[next_tile_index] == 0
@@ -79,8 +85,8 @@ class solver2048():
                             column[next_index] = 0 
                     column[3] = 0
             newStateColumns.append(column)
-            #print('final column')   
-            #print(column)
+            print('final column')   
+            print(column)
 
         col0 = newStateColumns[0]
         col1 = newStateColumns[1]
@@ -119,11 +125,11 @@ class solver2048():
                     for below_tiles in range (3, tile_index, -1):
                         # if the tile is a 0 then tile can move up
                         if column[below_tiles] == 0:
+                            moveMade = True
                             column[below_tiles] = tile
                             column[tile_index] = 0
                            # print('intermediate')
-                          #  print(column)
-                            moveMade = True
+                          #  print(column)ß
                             break
 
             # this pulls out every tile in the column (index)
@@ -133,6 +139,7 @@ class solver2048():
                 previous_tile_index = tile_index - 1
                 # Check if the next tile is within the column and has the same value
                 if tile != 0 and tile == column[previous_tile_index]:
+                    moveMade = True
                     # combines values
                     new_value = tile + column[previous_tile_index]
                     # updates top tile to have new combined value
@@ -208,6 +215,7 @@ class solver2048():
                 # Check if the next tile is within the column and has the same value
                 if tile != 0 and tile == row[next_tile_index]:
                     # combines values
+                    moveMade = True
                     new_value = tile + row[next_tile_index]
                     # updates top tile to have new combined value
                     row[tile_index] = new_value
@@ -276,6 +284,7 @@ class solver2048():
                 # Check if the next tile is within the column and has the same value
                 if tile != 0 and tile == row[previous_tile_index]:
                     # combines values
+                    moveMade = True
                     new_value = tile + row[previous_tile_index]
                     # updates top tile to have new combined value
                     row[tile_index] = new_value
@@ -302,35 +311,38 @@ class solver2048():
             return 0
         else: 
          return newState
+   
 
-    def utility(state):
-        answer = 0
-        # possible actions: up, down, left, right
-        upMove = solver2048.moveUp(state)
-        print('up')
-        print(upMove)
-        downMove = solver2048.moveDown(state)
-        print('downMove')
-        print(downMove)
-        leftMove = solver2048.moveLeft(state)
-        print('left')
-        print(leftMove)
-        rightMove = solver2048.moveRight(state)
-        print('right')
-        print(rightMove)
 
-        if upMove == 0 and downMove == 0 and leftMove == 0 and rightMove == 0:
-            answer = -1
+
+    # def utility(state):
+    #     answer = 0
+    #     # possible actions: up, down, left, right
+    #     upMove = solver2048.moveUp(state)
+    #     print('up')
+    #     print(upMove)
+    #     downMove = solver2048.moveDown(state)
+    #     print('downMove')
+    #     print(downMove)
+    #     leftMove = solver2048.moveLeft(state)
+    #     print('left')
+    #     print(leftMove)
+    #     rightMove = solver2048.moveRight(state)
+    #     print('right')
+    #     print(rightMove)
+
+    #     if upMove == 0 and downMove == 0 and leftMove == 0 and rightMove == 0:
+    #         answer = -1
              
  
-        # check if theres a win
-        for row in state:
-            for tile in row:
-                if tile == 2048:
-                    answer = 1
-                    break
-        print(answer)        
-        return answer
+    #     # check if theres a win
+    #     for row in state:
+    #         for tile in row:
+    #             if tile == 2048:
+    #                 answer = 1
+    #                 break
+    #     print(answer)        
+    #     return answer
 
     def evaluationFunction(state, action):
         """ 
@@ -350,44 +362,59 @@ class solver2048():
         # Useful information you can extract from a GameState (pacman.py)
         if action == "Up":
             successorGameState = solver2048.moveUp(state)
+           
         
         if action == "Down":
             successorGameState = solver2048.moveDown(state)
+            print(successorGameState)
         
         if action == "Left":
             successorGameState = solver2048.moveLeft(state)
+            print(successorGameState)
         
         if action == "Right":
             successorGameState = solver2048.moveRight(state)
 
+        if successorGameState == 0:
+            return -1
+        else:
         # finds current score + next score
-        currentScore = 0
-        for r in state:
-            for i in r:
-                currentScore+=i 
-        
-        nextScore = 0
-        for r in successorGameState:
-            for i in r:
-                currentScore+=i 
-
-        
-        # how many squares were merged
-        
-        currentEmptySquares = 0
-        for r in state:
-            for i in r:
-                if i == 0:
-                    currentScore+=1
-        
-        nextEmptySquares = 0
-        for r in successorGameState:
-            for i in r:
-                if i == 0:
-                    currentScore+=1
-        
-        # num squares merged = currentEmptySquares - nextEmptySquares
-        numMerged = currentEmptySquares - nextEmptySquares
+            currentScore = 0
+            for r in state:
+                for i in r:
+                    currentScore+=i 
+            
+            nextScore = 0
+            for r in successorGameState:
+                for i in r:
+                    nextScore+=i
+            
+            print(currentScore)
+            print(nextScore)
+            
+            increase = nextScore - currentScore
+            
+            # how many squares were merged
+            currentEmptySquares = 0
+            for r in state:
+                for i in r:
+                    if i == 0:
+                        currentEmptySquares+=1
+            
+            print(currentEmptySquares)
+            
+            nextEmptySquares = 0
+            for r in successorGameState:
+                for i in r:
+                    if i == 0:
+                        nextEmptySquares+=1
+            
+            print(nextEmptySquares)
+            
+            # num squares merged = currentEmptySquares - nextEmptySquares
+            numMerged = nextEmptySquares - currentEmptySquares
+            return increase + numMerged
+ 
 
 
         
@@ -482,3 +509,171 @@ class solver2048():
         #             if currentValue < minValue:
         #                 minValue = currentValue
         # return minValue
+
+
+class Test2048(unittest.TestCase):
+    
+    def test_up_0(self):
+        board = [
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0]
+        ]
+        self.assertEqual(solver2048.moveUp(board), 0)
+
+    def test_up_1(self):
+        board1 = [
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0],
+            [2,0,0,0]
+        ]
+        self.assertEqual(solver2048.moveUp(board1), 
+                         [
+            [2,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0]
+        ])
+
+
+    def test_up_2(self):
+        board2 = [
+            [0,0,0,0],
+            [0,0,0,0],
+            [2,0,0,0],
+            [2,0,0,0]
+        ]
+        self.assertEqual(solver2048.moveUp(board2), 
+                         [
+            [4,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0]
+        ])
+
+    def test_up_3(self):
+        board3 = [
+            [0,0,0,0],
+            [2,0,0,0],
+            [4,0,0,0],
+            [2,0,0,0]
+        ]
+        self.assertEqual(solver2048.moveUp(board3), 
+                         [
+            [2,0,0,0],
+            [4,0,0,0],
+            [2,0,0,0],
+            [0,0,0,0]
+        ])
+    
+    def test_up_4(self):
+        board4 = [
+            [8,0,0,0],
+            [4,0,0,0],
+            [8,0,0,0],
+            [2,0,0,0]
+        ]
+        self.assertEqual(solver2048.moveUp(board4), 
+                         0 )
+    
+    def test_down_0(self):
+        board = [
+    [2, 0, 2, 0],
+    [0, 2, 0, 2],
+    [4, 2, 2, 4],
+    [0, 4, 0, 4]
+        ]
+        self.assertEqual(solver2048.moveDown(board), 
+                         [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [2, 4, 0, 2],
+    [4, 4, 4, 8]
+                         ] )
+    
+    def test0down(self):
+        board = [
+    [2, 0, 0, 0],
+    [2, 2, 0, 0],
+    [4, 2, 4, 8],
+    [4, 4, 4, 8]
+        ]
+        self.assertEqual(solver2048.moveDown(board), 
+                         [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [4, 4, 0, 0],
+    [8, 4, 8, 16]
+        ]
+                         
+                         )
+    
+    def test0up(self):
+        board = [
+    [2, 0, 0, 0],
+    [2, 2, 0, 0],
+    [4, 2, 4, 8],
+    [4, 4, 4, 8]
+        ]
+        self.assertEqual(solver2048.moveUp(board), 
+                         [
+    [4, 4, 8, 16],
+    [8, 4, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0]
+        ]                
+                         )
+
+    def test0left(self):
+        board = [
+    [2, 0, 0, 0],
+    [2, 2, 0, 0],
+    [4, 2, 4, 8],
+    [4, 4, 4, 8]
+        ]
+        self.assertEqual(solver2048.moveLeft(board), 
+                         
+    [[2, 0, 0, 0],
+    [4, 0, 0, 0],
+    [4, 2, 4, 8],
+    [8, 4, 8, 0]
+        ])
+    
+    def test0right(self):
+        board = [
+    [2, 0, 0, 0],
+    [2, 2, 0, 0],
+    [4, 2, 4, 8],
+    [4, 4, 4, 8]
+        ]
+        self.assertEqual(solver2048.moveRight(board), 
+                         
+    [[0, 0, 0, 2],
+    [0, 0, 0, 4],
+    [4, 2, 4, 8],
+    [0, 4, 8, 8]])
+
+    
+    def test_eval_0(self):
+        board = [
+    [2, 0, 0, 0],
+    [2, 2, 0, 0],
+    [4, 2, 4, 8],
+    [4, 4, 4, 8]
+        ]
+
+        up_eval = solver2048.evaluationFunction(board, "Up")
+        down_eval = solver2048.evaluationFunction(board, "Down")
+        print(down_eval)
+        right_eval= solver2048.evaluationFunction(board, "Right")
+        left_eval = solver2048.evaluationFunction(board, "Left")
+        print(left_eval)
+
+        self.assertEqual(up_eval > right_eval, True)
+        self.assertEqual(down_eval > left_eval, True)
+
+
+if __name__ == '__main__':
+    unittest.main()
