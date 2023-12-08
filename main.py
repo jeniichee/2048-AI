@@ -1,4 +1,5 @@
 import unittest;
+import random;
 
 class solver2048():
     #tic tac toe representation: list of three tuples w 3 posns
@@ -26,13 +27,26 @@ class solver2048():
     # 2- test with v limited settings --> does the result state i want exist two steps away
 
     # i.e. goal build 64 tile and have a state 3-5 steps away from building 64 
+    
+    def startState():
+        
+        board = [[0,0,0,0], 
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]]
+         
+        for row in board: 
+            
+            for index in row: 
+                
+        
+        return board
 
     def moveUp(state):
         newStateColumns = []
         moveMade = False
-        #action = up
+        # action = up
         # for every possible index
-
 
         for index in range(0,4) :
         # this just pulls out a column
@@ -43,7 +57,7 @@ class solver2048():
             print(column)
 
             # moves everything up
-            #this pulls out every tile in the column (index)
+            # this pulls out every tile in the column (index)
             for tile_index in range(0,4):
                 # the tile
                 tile = column[tile_index]
@@ -64,7 +78,7 @@ class solver2048():
                             print(column)
                             break
 
-            #this pulls out every tile in the column (index)
+            # this pulls out every tile in the column (index)
             for tile_index in range(0,3): 
                 tile = column[tile_index]
 
@@ -171,7 +185,6 @@ class solver2048():
             return 0
         else: 
          return newState
-
     
     def moveLeft(state):
         newState = []
@@ -234,7 +247,6 @@ class solver2048():
                     row[3] = 0
             newState.append(row)
                 
-
             #print('final column')   
             #print(row)
 
@@ -242,7 +254,6 @@ class solver2048():
             return 0
         else: 
          return newState
-
 
     def moveRight(state):
         newState = []
@@ -311,9 +322,6 @@ class solver2048():
             return 0
         else: 
          return newState
-   
-
-
 
     # def utility(state):
     #     answer = 0
@@ -359,10 +367,10 @@ class solver2048():
         Print out these variables to see what you're getting, then combine them
         to create a masterful evaluation function.
         """
+        
         # Useful information you can extract from a GameState (pacman.py)
         if action == "Up":
             successorGameState = solver2048.moveUp(state)
-           
         
         if action == "Down":
             successorGameState = solver2048.moveDown(state)
@@ -415,9 +423,6 @@ class solver2048():
             numMerged = nextEmptySquares - currentEmptySquares
             return increase + numMerged
  
-
-
-        
 
         # newPos = successorGameState.getPacmanPosition()
         # newFood = successorGameState.getFood()
@@ -491,12 +496,6 @@ class solver2048():
         # 
         # # an action is placing a 2 or 4 on any empty tile
 
-
-
-
-
-
-
         # for i in range(0,3):
         #     for j in range(0,3):
         #         if state[i][j] == "n":
@@ -510,6 +509,41 @@ class solver2048():
         #                 minValue = currentValue
         # return minValue
 
+def generateTile(state):
+    # keep track of empty tiles 
+    empty_tiles = [] 
+    new_state = [] # updated state 
+    
+    # if a move was not made, return state
+    if state == 0: 
+        return state
+    
+    # find empty tiles 
+    for i in range(4):
+        for j in range(4):
+            if state[i][j] == 0:
+                empty_tiles.append((i, j))
+    
+    # print(empty_tiles)
+    
+    # 90% 2 and 10% 4
+    new_value = random.choices([2,4], weights=[0.9, 0.1])[0]
+    # print(new_value)
+    
+    # pick random empty tile
+    mt_tile = random.choice(empty_tiles)
+    # print(mt_tile)
+    
+    # update tile
+    i, j = mt_tile 
+    state[i][j] = new_value
+    
+    new_state.append(state)
+
+    return new_state
+    
+    #%%
+    
 
 class Test2048(unittest.TestCase):
     
@@ -677,3 +711,4 @@ class Test2048(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+# %%
